@@ -1,0 +1,13 @@
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'jetty'
+
+repositories {
+        mavenCentral()
+}
+dependencies {
+        providedCompile "javax.servlet:servlet-api:2.5"
+}
+
+[jettyRun, jettyRunWar, jettyStop]*.stopPort = 8089
+[jettyRun, jettyRunWar, jettyStop]*.stopKey = 'stopKey'
