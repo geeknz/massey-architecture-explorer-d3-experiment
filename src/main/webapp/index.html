@@ -19,8 +19,8 @@
 	<body>
 		<script type="text/javascript">
 
-			var width = 960,
-				height = 500
+			var width = window.innerWidth,
+				height = window.innerHeight;
 
 			var colors = d3.scale.category20();
 
@@ -29,35 +29,35 @@
 				.linkDistance(30)
 				.size([width, height]);
 
-			var svg = d3.select("body").append("svg")
+			var svg = d3.select("body").append("svg:svg")
 				.attr("width", width)
 				.attr("height", height);
 
-            d3.json("data-converted/fitjava-1.1.jar.json", function(dataset) {
+			d3.json("data-converted/fitjava-1.1.jar.json", function(dataset) {
 
-            	force.nodes(dataset.nodes)
-            		.links(dataset.edges)
-            		.start();
+				force.nodes(dataset.nodes)
+					.links(dataset.edges)
+					.start();
 
-            	var edges = svg.selectAll(".edge")
-            		.data(dataset.edges)
-            		.enter()
-            		.append("line")
-            		.attr("class", "edge");
+				var edges = svg.selectAll(".edge")
+					.data(dataset.edges)
+					.enter()
+					.append("line")
+					.attr("class", "edge");
 
-            	var nodes = svg.selectAll(".node")
-            		.data(dataset.nodes)
-            		.enter()
-            		.append("rect")
-            		.attr("class", "node")
-            		.attr("width", 10)
-            		.attr("height", 10)
+				var nodes = svg.selectAll(".node")
+					.data(dataset.nodes)
+					.enter()
+					.append("rect")
+					.attr("class", "node")
+					.attr("width", 10)
+					.attr("height", 10)
 					.style("fill", function(d, i) {
 						return colors(i);
 					})
-            		.call(force.drag)
+					.call(force.drag)
 
-            	force.on("tick", function() {
+				force.on("tick", function() {
 					edges.attr("x1", function(d) { return d.source.x; })
 						.attr("y1", function(d) { return d.source.y; })
 						.attr("x2", function(d) { return d.target.x; })
@@ -65,7 +65,7 @@
 
 					nodes.attr("x", function(d) { return d.x; })
 						.attr("y", function(d) { return d.y; });
-                });
+				});
 			});
 
 		</script>
