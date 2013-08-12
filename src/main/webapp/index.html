@@ -39,6 +39,10 @@
 				.attr("width", width)
 				.attr("height", height);
 
+			var boxLength = function( node ) {
+				return node.localname.length * 10;
+			};
+
 			d3.json("data-converted/fitjava-1.1.jar.json", function(dataset) {
 
 				force.nodes(dataset.nodes)
@@ -64,7 +68,10 @@
 				// Main Box
 				nodes.append("svg:rect")
 					.attr("class", ".node")
-					.attr("width", 100)
+					.attr("width", function(node) {
+
+						return boxLength(node);
+					})
 					.attr("height", 60)
 					.attr("rx", 5)
 					.attr("ry", 5)
@@ -76,7 +83,10 @@
 				nodes.append("svg:line")
 					.attr("x1", 0)
 					.attr("y1", 25)
-					.attr("x2", 100)
+					.attr("x2", function(node) {
+
+						return boxLength(node);
+					})
 					.attr("y2", 25)
 					.style("stroke", "#fff")
 					.style("stroke-width", 1);
