@@ -88,11 +88,9 @@
 							return boxLength(node);
 						})
 						.attr("height", 60)
-						.attr("rx", 5)
-						.attr("ry", 5)
-						.style("fill", function(d, i) {
-							return colors(i);
-						});
+						.style("fill", "#ffffc7")
+						.style("stroke", "#000")
+						.style("stroke-width", 1);
 
 					// Line
 					nodes.append("svg:line")
@@ -103,7 +101,7 @@
 							return boxLength(node);
 						})
 						.attr("y2", 25)
-						.style("stroke", "#fff")
+						.style("stroke", "#000")
 						.style("stroke-width", 1);
 
 					// Text
