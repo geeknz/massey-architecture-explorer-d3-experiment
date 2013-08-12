@@ -3,7 +3,7 @@ Massey Architecture Explorer Experiment
 
 Live Demo
 ---------
-The Latest build can be found at [http://d3.nerd.bd.to/](http://d3.nerd.bd.to/)
+The latest build can be found at [http://d3.nerd.bd.to/](http://d3.nerd.bd.to/)
 
 Links
 -----
