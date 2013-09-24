@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>D3: Force Layout</title>
+		<script src="js/jshashtable-3.0.js" charset="utf-8"></script>
 		<script src="js/d3.v3.min.js" charset="utf-8"></script>
 		<script src="js/Font.js" charset="utf-8"></script>
 		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
@@ -26,6 +27,76 @@
 	</head>
 	<body>
 		<script type="text/javascript">
+
+			var Point = function( x, y ) {
+
+				this.x = x;
+				this.y = y;
+
+			};
+
+			Point.prototype = {
+
+					distSquared : function( p2 ) {
+
+						Δx = p2.x - this.x;
+						Δy = p2.y - this.y;
+
+						return ( Δx * Δx ) + ( Δy * Δy )
+					}
+			};
+
+			var StopWatch = function() {
+
+				this.startTime = null;
+				this.stopTime = null;
+				this.running = false;
+			};
+
+			StopWatch.prototype = {
+
+					getTime : function() {
+
+						var day = new Date();
+						return day.getTime();
+					},
+
+					start : function() {
+
+						if ( this.running ) {
+							return;
+						}
+
+						if ( this.startTime != null ) {
+							this.stopTime = null;
+						}
+
+						this.running = true;
+						this.startTime = this.getTime();
+					},
+
+					stop : function() {
+
+						if ( this.running == false ) {
+							return;
+						}
+
+						this.stopTime = this.getTime();
+						this.running = false;
+					},
+
+					duration : function() {
+
+						if ( this.startTime == null || this.stopTime == null ) {
+							return;
+						}
+
+						return ( this.stopTime - this.startTime );
+					}
+			};
+
+			var stopWatch = new StopWatch();
+			var nodesTable = new Hashtable();
 
 			var font = new Font();
 			font.fontFamily ="Ubuntu";
@@ -112,6 +183,7 @@
 						.text( function(d) {
 							return d.localname;
 						});
+					stopWatch.start();
 					force.on("tick", function() {
 						edges.attr("x1", function(d) { return d.source.x; })
 							.attr("y1", function(d) { return d.source.y; })
@@ -119,11 +191,28 @@
 							.attr("y2", function(d) { return d.target.y; });
 
 						nodes.attr("transform", function(d) {
-							return "translate(" + (d.x - 50) + "," + (d.y - 30) + ")";
+
+							var next = new Point( d.x - 50, d.y - 30 );
+
+							if ( nodesTable.containsKey( this ) ) {
+
+								var previous = nodesTable.get( this );
+								d2 = next.distSquared( previous );
+
+								if ( d2 < 0.00001 ) {
+									stopWatch.stop();
+									console.log( stopWatch.duration() );
+								};
+							};
+
+							nodesTable.put( this, next );
+
+							return "translate(" + next.x + "," + next.y + ")";
 						});
 					});
 				});
 			};
+
 		</script>
 	</body>
 </html>
