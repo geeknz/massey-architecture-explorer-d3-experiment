@@ -35,14 +35,23 @@ requirejs.config({
 require( [ 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Font, HashTable, d3, $ ) {
 
 	var data = $.url().param( 'data' );
-
 	var font = new Font();
 
 	font.onload = function() {
 
-		console.log( font );
+		/* Load data */
+		d3.json( 'data/' + data, function( dataset, error ) {
+
+			/* Sanity Check */
+			if ( !error ) {
+				throw( 'Failed to load ' + data );
+			};
+
+			console.log( 'Loaded ' + data );
+		});
 	}
 
+	/* Kick off */
 	font.fontFamily = "Ubuntu";
 	font.src = font.fontFamily;
 });
