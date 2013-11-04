@@ -67,6 +67,54 @@ require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.u
 			/* Create graph */
 			var graph = new Graph( window.innerWidth, window.innerHeight, dataset );
 
+			/* Instrument */
+			graph.setInstrument( function() {
+
+				var Point = function( x, y ) {
+
+					this.x = x;
+					this.y = y;
+				};
+
+				Point.prototype = {
+
+						d2 : function( point ) {
+
+							Δx = point.x - this.x;
+							Δy = point.y - this.y;
+
+							return ( Δx * Δx ) + ( Δy * Δy );
+						}
+				};
+
+				var previousPoints = new Hashtable();
+
+				return function( nodes ) {
+
+					var points = new Hashtable();
+
+					/* Sanity Check */
+					if ( previousPoints.isEmpty() ) {
+
+						nodes.each( function() {
+							previousPoints.put( this, new Point( this.x, this.y ) );
+						});
+
+						return;
+					};
+
+					/* Calculate Points */
+					nodes.each( function() {
+						points.put( this, new Point( this.x, this.y ) );
+					});
+
+					// TODO: Calculate Distance
+
+					/* Update Previous */
+					previousPoints = points.clone();
+				};
+			}());
+
 			/* Render */
 			graph.doRender( d3.select('body') );
 		});
