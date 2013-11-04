@@ -5,7 +5,8 @@ requirejs.config({
 		'jquery.url' : '//cdn.jsdelivr.net/jquery.url.parser/2.2.1/purl',
 		'd3' : 'lib/d3.v3.min',
 		'hashtable' : 'lib/hashtable',
-		'font' : 'lib/Font'
+		'font' : 'lib/Font',
+		'fontdetect' : '//www.lalit.org/wordpress/wp-content/uploads/2008/05/fontdetect.js?ver=0.3#'
 	},
 
 	shim: {
@@ -28,11 +29,15 @@ requirejs.config({
 
 		'font' : {
 			exports: 'Font'
+		},
+
+		'fontdetect' : {
+			exports: 'Detector'
 		}
 	}
 });
 
-require( [ 'graph', 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Graph, Font, HashTable, d3, $ ) {
+require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Graph, Font, Detector, HashTable, d3, $ ) {
 
 	var data = $.url().param( 'data' );
 
@@ -68,6 +73,17 @@ require( [ 'graph', 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], functio
 	}
 
 	/* Kick off */
-	font.fontFamily = 'Ubuntu';
+	font.fontFamily = function() {
+		var detective = new Detector();
+		var fonts = $('body').css( 'font-family' ).split(',');
+
+		for ( i in fonts ) {
+			var font = fonts[ i ];
+			if ( detective.detect( font ) ) {
+				return font;
+			};
+		};
+	}();
+
 	font.src = font.fontFamily;
 });
