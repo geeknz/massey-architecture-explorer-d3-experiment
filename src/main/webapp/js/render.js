@@ -35,6 +35,10 @@ requirejs.config({
 require( [ 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Font, HashTable, d3, $ ) {
 
 	var data = $.url().param( 'data' );
+
+	var fontSize = 12;
+	var labelPadding = 50;
+
 	var font = new Font();
 
 	font.onload = function() {
@@ -48,6 +52,12 @@ require( [ 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Font, 
 			};
 
 			console.log( 'Loaded ' + data );
+
+			/* Calculate Node widths */
+			for ( i in dataset.nodes ) {
+				var node = dataset.nodes[ i ];
+				node.width = font.measureText( node.localname, fontSize ).width + labelPadding;
+			}
 		});
 	}
 
