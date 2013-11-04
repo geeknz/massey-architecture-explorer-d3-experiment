@@ -1,5 +1,16 @@
 @import url( http://fonts.googleapis.com/css?family=Ubuntu );
 
 body {
-	font-family: 'Ubuntu', sans-serif;
+	font-size: 12px;
+	font-family: 'Ubuntu';
+}
+
+.node {
+	stroke: #fff;
+	stroke-width: 1.5px;
+}
+
+.edge {
+	stroke: black;
+	stroke-width: 2;
 }

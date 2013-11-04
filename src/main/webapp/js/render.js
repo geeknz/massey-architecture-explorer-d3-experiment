@@ -32,7 +32,7 @@ requirejs.config({
 	}
 });
 
-require( [ 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Font, HashTable, d3, $ ) {
+require( [ 'graph', 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Graph, Font, HashTable, d3, $ ) {
 
 	var data = $.url().param( 'data' );
 
@@ -57,11 +57,17 @@ require( [ 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Font, 
 			for ( i in dataset.nodes ) {
 				var node = dataset.nodes[ i ];
 				node.width = font.measureText( node.localname, fontSize ).width + labelPadding;
-			}
+			};
+
+			/* Create graph */
+			var graph = new Graph( window.innerWidth, window.innerHeight, dataset );
+
+			/* Render */
+			graph.doRender( d3.select('body') );
 		});
 	}
 
 	/* Kick off */
-	font.fontFamily = "Ubuntu";
+	font.fontFamily = 'Ubuntu';
 	font.src = font.fontFamily;
 });
