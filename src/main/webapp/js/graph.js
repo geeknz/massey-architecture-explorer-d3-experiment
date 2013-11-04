@@ -1,10 +1,15 @@
 define( ['d3'], function( d3 ) {
 
+	var EMPTY_FUNC = function() {
+		return;
+	};
+
 	function Graph ( width, height, data ) {
 
 		this.width = width;
 		this.height = height;
 		this.data = data;
+		this.instrument = EMPTY_FUNC;
 	};
 
 	Graph.prototype = {
@@ -31,6 +36,10 @@ define( ['d3'], function( d3 ) {
 
 		getData : function() {
 			return this.data;
+		},
+
+		setInstrument : function( instrument ) {
+			this.instrument = instrument;
 		},
 
 		doRender : function( container ) {
@@ -91,8 +100,10 @@ define( ['d3'], function( d3 ) {
 					return node.localname;
 				});
 
+			var that = this;
 			force.on( 'tick', function() {
 
+				that.instrument( nodes, edges );
 				edges.attr( 'x1', function( edge ) {
 					return edge.source.x;
 				})
