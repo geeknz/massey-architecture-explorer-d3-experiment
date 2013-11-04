@@ -40,10 +40,10 @@ require( [ 'font', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Font, 
 	font.onload = function() {
 
 		/* Load data */
-		d3.json( 'data/' + data, function( dataset, error ) {
+		d3.json( 'data/' + data, function( error, dataset ) {
 
 			/* Sanity Check */
-			if ( !error ) {
+			if ( error ) {
 				throw( 'Failed to load ' + data );
 			};
 
