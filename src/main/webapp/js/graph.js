@@ -67,6 +67,15 @@ define( ['d3'], function( d3 ) {
 				.data( this.data.nodes )
 				.enter()
 				.append( 'svg:g' )
+				.on( 'click', function() {
+
+					/* Move to Front */
+					d3.select( this )
+						.each( function() {
+							this.parentNode.appendChild( this );
+						}
+					);
+				})
 				.call( force.drag );
 
 			// Main Box
@@ -121,7 +130,7 @@ define( ['d3'], function( d3 ) {
 				});
 
 				nodes.attr( 'transform', function( node ) {
-					return 'translate(' + ( node.x - 50 ) + ',' + ( node.y - 30) + ')';
+					return 'translate(' + ( node.x - 50 ) + ',' + ( node.y - 30 ) + ')';
 				});
 
 			});
