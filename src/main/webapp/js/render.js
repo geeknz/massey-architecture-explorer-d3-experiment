@@ -40,6 +40,8 @@ requirejs.config({
 require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.url' ], function( Graph, Font, Detector, HashTable, d3, $ ) {
 
 	var data = $.url().param( 'data' );
+	var instrument = $.url().param( 'instrument' );
+	var threshold = $.url().param( 'threshold' ) || 0.03;
 
 	var fontSize = 12;
 	var labelPadding = 50;
@@ -68,52 +70,77 @@ require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.u
 			var graph = new Graph( window.innerWidth, window.innerHeight, dataset );
 
 			/* Instrument */
-			graph.setInstrument( function() {
+			if ( instrument == 'yes' ) {
 
-				var Point = function( x, y ) {
+				var numOfNodes = dataset.nodes.length;
+				var numOfEdges = dataset.edges.length;
 
-					this.x = x;
-					this.y = y;
-				};
+				var start;
+				graph.setInstrument( function() {
 
-				Point.prototype = {
+					var Point = function( x, y ) {
 
-						d2 : function( point ) {
-
-							Δx = point.x - this.x;
-							Δy = point.y - this.y;
-
-							return ( Δx * Δx ) + ( Δy * Δy );
-						}
-				};
-
-				var previousPoints = new Hashtable();
-
-				return function( nodes ) {
-
-					var points = new Hashtable();
-
-					/* Sanity Check */
-					if ( previousPoints.isEmpty() ) {
-
-						nodes.each( function() {
-							previousPoints.put( this, new Point( this.x, this.y ) );
-						});
-
-						return;
+						this.x = x;
+						this.y = y;
 					};
 
-					/* Calculate Points */
-					nodes.each( function() {
-						points.put( this, new Point( this.x, this.y ) );
-					});
+					Point.prototype = {
 
-					// TODO: Calculate Distance
+							d2 : function( point ) {
 
-					/* Update Previous */
-					previousPoints = points.clone();
-				};
-			}());
+								Δx = point.x - this.x;
+								Δy = point.y - this.y;
+
+								return ( Δx * Δx ) + ( Δy * Δy );
+							}
+					};
+
+					var stable = false;
+					var previousPoints = new Hashtable();
+
+					return function( nodes ) {
+
+						if ( stable ) {
+							return;
+						};
+
+						var points = new Hashtable();
+
+						/* Sanity Check */
+						if ( previousPoints.isEmpty() ) {
+							nodes.each( function( node ) {
+								previousPoints.put( node, new Point( node.x, node.y ) );
+							});
+							return;
+						};
+
+						/* Calculate Points */
+						var total = 0;
+						nodes.each( function( node ) {
+							var previousPoint = previousPoints.get( node );
+							var point = new Point( node.x, node.y );
+
+							total = total + previousPoint.d2( point );
+
+							points.put( node, point );
+						});
+
+						if ( total / nodes.size() < threshold ) {
+							stable = true;
+							console.log( 'Nodes:' + numOfNodes );
+							console.log( 'Edges:' + numOfEdges );
+							console.log( 'Time: ' + ( new Date().getTime() - start ) + 'ms' );
+							console.log( 'Threshold: ' + threshold )
+							return;
+						};
+
+						/* Update Previous */
+						previousPoints = points;
+					};
+				}());
+
+				start = new Date().getTime();
+			};
 
 			/* Render */
 			graph.doRender( d3.select('body') );
