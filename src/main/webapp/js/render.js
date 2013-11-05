@@ -42,6 +42,8 @@ require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.u
 	var data = $.url().param( 'data' );
 	var instrument = $.url().param( 'instrument' );
 	var threshold = $.url().param( 'threshold' ) || 0.03;
+	var width = $.url().param( 'width' ) || window.innerWidth;
+	var height = $.url().param( 'height' ) || window.innerHeight;
 
 	var fontSize = 12;
 	var labelPadding = 50;
@@ -67,7 +69,7 @@ require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.u
 			};
 
 			/* Create graph */
-			var graph = new Graph( window.innerWidth, window.innerHeight, dataset );
+			var graph = new Graph( width, height, dataset );
 
 			/* Instrument */
 			if ( instrument == 'yes' ) {
