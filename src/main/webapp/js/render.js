@@ -41,7 +41,8 @@ require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.u
 
 	var data = $.url().param( 'data' );
 	var instrument = $.url().param( 'instrument' );
-	var threshold = $.url().param( 'threshold' ) || 0.03;
+	var threshold = $.url().param( 'threshold' ) || 0.3;
+	var repeat = $.url().param( 'repeat' );
 	var width = $.url().param( 'width' ) || window.innerWidth;
 	var height = $.url().param( 'height' ) || window.innerHeight;
 
@@ -128,11 +129,19 @@ require( [ 'graph', 'font', 'fontdetect', 'hashtable', 'd3', 'jquery', 'jquery.u
 						});
 
 						if ( total / nodes.size() < threshold ) {
+
+							var duration = new Date().getTime() - start
 							stable = true;
+
 							console.log( 'Nodes:' + numOfNodes );
 							console.log( 'Edges:' + numOfEdges );
-							console.log( 'Time: ' + ( new Date().getTime() - start ) + 'ms' );
+							console.log( 'Time: ' + duration + 'ms' );
 							console.log( 'Threshold: ' + threshold )
+
+							$.post( "Results", { '_dataSet' : data, '_threshold' : threshold, '_duration' : duration }, function() {
+								location.reload();
+							});
+
 							return;
 						};
 

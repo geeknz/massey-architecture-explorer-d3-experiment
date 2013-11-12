@@ -1,3 +1,4 @@
+<%@ page import="eu.bitwalker.useragentutils.UserAgent" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,6 @@
 		)
 		.listFiles();
 %>
-
 	<table>
 <%
 	for ( int i = 0 ; i < files.length ; i++ ) {
@@ -21,7 +21,7 @@
 
 		<tr>
 			<td>
-				<a href="render.html?data=<%= files[ i ].getName() %>"><%= files[ i ].getName() %></a>
+				<a href="render.html?data=<%= files[ i ].getName() %>&instrument=yes"><%= files[ i ].getName() %></a>
 			</td>
 		</tr>
 <%

@@ -5,6 +5,20 @@
 	version="2.4"
 	id="WebApp_ID">
 	<display-name>Massey Architecture Explorer D3 Experiment</display-name>
+	<listener>
+		<listener-class>nz.ac.massey.cs.experimentation.d3.db.DatabaseConfiguration</listener-class>
+	</listener>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Results</display-name>
+		<servlet-name>Results</servlet-name>
+		<servlet-class>nz.ac.massey.cs.experimentation.d3.Results</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Results</servlet-name>
+		<url-pattern>/Results</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>

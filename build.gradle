@@ -3,10 +3,16 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'jetty'
 
 repositories {
-        mavenCentral()
+	mavenCentral()
+	mavenRepo url: 'https://raw.github.com/HaraldWalker/user-agent-utils/mvn-repo'
 }
 dependencies {
-        providedCompile "javax.servlet:servlet-api:2.5"
+	compile 'bitwalker:UserAgentUtils:1.11'
+	compile 'com.j256.ormlite:ormlite-core:4.47'
+	compile 'com.j256.ormlite:ormlite-jdbc:4.47'
+	compile 'com.google.code.gson:gson:2.2.4'
+	runtime 'org.xerial:sqlite-jdbc:3.7.2'
+	providedCompile "javax.servlet:servlet-api:2.5"
 }
 
 [jettyRun, jettyRunWar, jettyStop]*.stopPort = 8089
